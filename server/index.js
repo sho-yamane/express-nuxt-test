@@ -1,7 +1,10 @@
 const express = require('express')
 const consola = require('consola')
 const constants = require("./constants")
-const { Nuxt, Builder } = require('nuxt')
+const {
+  Nuxt,
+  Builder
+} = require('nuxt')
 
 // routes
 const userRoute = require("./api/routes/user")
@@ -34,14 +37,14 @@ async function start() {
   // Give nuxt middleware to express
   // app.use(nuxt.render)
 
-  app.get('/', (req, res) => {
-    (async () => {
-      req.data = await user()
-      const result = await nuxt.renderRoute('/top', { req })
-      res.send(result.html)
-    })()
-  })
+  // /top に来たとき
+  app.get('/top', async (req, res, next) => {
+    res.context.users = await user()
+    next()
+  }, nuxt.render)
 
+  // その他のrouteに来た時 (これは動かないかも知れない)
+  app.use(nuxt.render)
 
   // Listen the server
   app.listen(constants.port, constants.host)

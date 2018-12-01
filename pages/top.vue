@@ -1,14 +1,20 @@
 <template>
   <div>
-    {{ apiResult }}
-    あいうえお
+    <ul>
+      <li
+        v-for="(user, key) in users"
+        :key="key"
+      >{{ user.name }}: {{ user.age }}</li>
+    </ul>
   </div>
 </template>
 
 <script>
 export default {
-  asyncData(context) {
-    return { apiResult: context.req.data }
+  asyncData({ res }) {
+    return {
+      users: res.context.users
+    }
   }
 }
 </script>
